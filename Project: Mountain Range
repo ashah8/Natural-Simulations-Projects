@@ -1,0 +1,103 @@
+background(144, 209, 206);
+//castle
+fill(56, 2, 56); noStroke();
+    rect(122, 174, 40, 80);
+    rect(0, 174, 40, 80);
+    rect(40, 195, 84, 80);
+    fill(255, 0, 13);
+    triangle(0, 176, 40, 176, 20, 119);
+    triangle(120, 176, 163, 176, 144, 119);
+    fill(15, 7, 7);
+    rect(14,200, 16, 16);
+    rect(135,200, 16, 16);
+    ellipse(22, 199, 16, 16);
+    ellipse(143, 199, 16, 16);
+    fill(69, 29, 29);
+    rect(57,224, 50, 50);
+    stroke(0, 0, 0);
+var drawBird = function() {
+    var r = random(200, 400); //this is random for x location
+    var r2 = random(0, 220); //this is random for y location
+    var size = random(0, 40);
+    fill(0, 0, 0);
+    ellipse(r, r2, 44, size+3); // (44, 47))
+    fill(144, 209, 206);      
+    ellipse(r-7, r2+9, size/2, size+3);// ()
+    ellipse(r+7, r2+9, size/2, size+3);// ()
+    
+    /*    ellipse(151, 67, 45, 46); // (r, r2, 45, 46)
+    fill(144, 209, 206);      
+    ellipse(144, 76, 22, 47);// (r-7, r2+9, 22, 47)
+    ellipse(158, 76, 22, 47);// (r+7, r2+9, 22, 47)*/
+};
+
+var drawSnow = function() {
+    noStroke();
+    fill(120, 113, 120);
+    var incAmount = 0.01;
+    for (var t = 0; t < incAmount*width; t += incAmount) {
+        var n = noise(t);
+        var y = map(n, 0, 1, 0, height/2);
+        rect(t*100, height-y, 1, y);
+    }
+};
+var drawSnow2 = function() {
+    noStroke();
+    fill(255, 255, 255);
+    var incAmount = 0.01;
+    for (var t = 0; t < incAmount*width; t += incAmount) {
+        var n = noise(t);
+        var y = map(n, 0, 1, 0, height/2);
+        rect(t*100, height-y+20, 1, y);
+    }
+};
+var drawRange = function() {
+    fill(255, 255, 255);
+    var incAmount = 0.01;
+    for (var t = 0; t < incAmount*width; t += incAmount) {
+        var n = noise(t);
+        var y = map(n, 0, 1, 0, height/2);
+        rect(t*100, height-y-51, 1, y);
+    }
+};
+
+drawRange();
+
+drawSnow();
+drawSnow2();
+
+
+
+var t = 0;
+//drawing the sun
+for (var y = 0; y < 90; y = y + 2) {
+fill(200+(y*4), 255+(y*-2), 0);
+ellipse(0,0,230-y,230-y);
+}
+for (var y = 0; y < 90; y = y + 2) {
+fill(200+(y*4), 255+(y*-2), 0);
+ellipse(0,0,170-y,170-y);
+}
+for (var y = 0; y < 90; y = y + 2) {
+fill(94+(y*4), 255, 0);
+ellipse(0,0,109-y,109-y);
+}
+
+
+
+
+var draw = function() {
+  noStroke();
+  fill(43, 77, 37);
+  var n = noise(t);
+  var x = map(n, 0, 1, 0, height);
+  t += 0.01;
+  rect(t*50-20, 466, 20, -x/2);
+  for (var birds = 0; birds < 30; birds++) {
+    rect(174, 0, 228, 235);
+    for (var hunger = 0; hunger < 20; hunger++) {
+        drawBird(); 
+    }
+}
+};
+
