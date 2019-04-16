@@ -1,0 +1,40 @@
+
+
+var generator = new Random(1);
+var generator2 = new Random(1);
+var randomnumber;
+var counter = 0;
+var counter2 = 0;
+var draw = function() {
+    var num2 = generator2.nextGaussian();
+    var num = generator.nextGaussian();
+    randomnumber = random(200);
+    
+    var standardDeviation = 60;
+    var mean = 200;
+    
+    var standardDeviation2 = 60;
+    var mean2 = 200;
+    
+    var x = standardDeviation * num + mean;
+    var y = standardDeviation2 * num2 + mean2;
+    noStroke();
+    fill(x, randomnumber, y, 10);
+    ellipse(x, y+randomnumber, 16, 16);
+    randomnumber = random(200);
+    noStroke();
+    fill(x, randomnumber, y, 10);
+    ellipse(x+randomnumber, y, 16, 16);
+    counter++;
+    if (counter > 10000){
+        generator = new Random(1);
+        generator2 = new Random(1);
+        counter = 0;
+    }
+    counter2++;
+    if (counter > 50000){
+        mean = random(200);
+        mean2 = random(200);
+        counter = 0;
+    }
+};
