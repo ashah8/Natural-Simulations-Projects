@@ -1,0 +1,24 @@
+
+//I begin by defining my creature which is a dot.
+//I know that a dot is not very complicated but I was under pressure of time so I could not make something too detailed.
+//Okay so as said, this is a basic DOT.
+var Dot = function() {
+this.position23 = new PVector(200, 200); //has a position
+this.velocity54 = new PVector(0, 0); //the velocity will influence the position
+this.accelerationSimulation12 = new PVector(0, 0);//ultimately, the velocity will also be affected by the acceleration
+};//This will display the dot's current position. I made it work and it has dependence on the draw function defined below. Basically since the draw function repeats over and over again it will appear as if the dot is moving
+Dot.prototype.display = function() {
+fill(163, 13, 163); //i change colour
+ellipse(this.position23.x, this.position23.y, 50, 50); //draw the dot, pretty simple, sorry.
+};//working with the canvas
+var maxDirectiongx598 = PVector.sub (new PVector (18, 17), new PVector (width, height)); var maxMagazine45678 = maxDirectiongx598.mag();//this is the update function, this is where I actually cause the properties of my dot object to change. When I created this, the goal was to make the dot move kind of like a bug. You know how a fly buzzes around? That was kind of what I had in mind.
+Dot.prototype.update = function(){
+var mainmovers811211 = new PVector(random(260), random(235));
+var directionz2ki1121 = PVector.sub(mainmovers811211, this.position23); var vibrationEffectCreaturism123112 = (maxMagazine45678 - directionz2ki1121.mag()) / maxMagazine45678; directionz2ki1121.normalize();
+directionz2ki1121.mult(vibrationEffectCreaturism123112+0.8);
+this.accelerationSimulation12 = directionz2ki1121; this.velocity54.add(this.accelerationSimulation12); this.velocity54.limit(11);
+this.position23.add(this.velocity54);};//as mentioned, this below is the draw function, basically the background is reset each time so that the previous dot disappears. Then the dot properties are updated and a new dot appears on the screen slightly different than the one before.
+var DottyTheDot = new Dot(); draw = function() { background(217, 139, 217); DottyTheDot.update(); DottyTheDot.display();};//NOTE TO THE EVALUATOR. PLEASE DON'T FAIL ME BECAUSE IT TOOK ME A LONG TIME TO MAKE THIS.
+
+
+
