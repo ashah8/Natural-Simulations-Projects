@@ -1,0 +1,80 @@
+//By Abdurrahman Shah
+//April 7, 2019
+
+
+
+//Create a dot object
+var Dot = function() {
+    //introducing mass so that the formula Force = Mass times Acceleration can be used
+    this.mass = 2;
+    this.position23 = new PVector(200, 200);
+    this.velocity54 = new PVector(0, 0);
+    this.accelerationSimulation12 = new PVector(0, 0);
+    //Above, at the basic level, position will be affected by velocity which will be affected by acceleration which will be affected by Force
+};
+//this is how to apply force
+
+//I created this function which is for any Dot Type of object
+//it takes a force in as its argument
+//creates a new variable which will then hold the value of force divided by the mass of the dot. The reason we that I decided to use pVector was so that the actual value of force does not get changed.
+Dot.prototype.applyForce = function(force) {
+    var f = PVector.div(force, this.mass);
+    this.accelerationSimulation12.add(f); //the acceleration value gets changed though when the f pVector is added to it
+};
+
+//this was a another Dot type that I was going to introduce but I got cut off of time.
+var smallDot = function() {
+    this.position = new PVector(200, 200);
+    this.velocity = new PVector(0,0);
+    this.acceleration = new PVector(0, 0);
+};
+//this is the update function where I cause changes. The changes happen every time the draw function is ran
+smallDot.prototype.update = function(){
+};
+//after it is updated it gets displayed, that appearing animated
+smallDot.prototype.display = function(){
+    fill(0, 0, 0);
+    ellipse(this.position.x, this.position.y, 5, 5);
+};
+
+//I use this to display my purpple dot on the screen
+Dot.prototype.display = function() {
+    fill(163, 13, 163);
+    ellipse(this.position23.x, this.position23.y, 50, 50);
+};
+
+//utilizing the cavas space
+var maxDirectiongx598 = PVector.sub (new PVector (18, 17), new PVector (width, height)); 
+var maxMagazine45678 = maxDirectiongx598.mag();
+//This is where my actual dot gets updated, I cause changes to occur to it. This is different from my other project because I am actually incorporaing force
+Dot.prototype.update = function(){
+    var mainmovers811211 = new PVector(random(260), random(235));
+    var directionz2ki1121 = PVector.sub(mainmovers811211, this            .position23); 
+    var vibrationEffectCreaturism123112 = (maxMagazine45678 -             directionz2ki1121.mag()) / maxMagazine45678; directionz2ki1121        .normalize();
+    directionz2ki1121.mult(vibrationEffectCreaturism123112+0.8);
+    this.accelerationSimulation12 = directionz2ki1121; this.velocity54    .add(this.accelerationSimulation12); this.velocity54.limit(11);
+    this.position23.add(this.velocity54); 
+    this.velocity54.add(this.accelerationSimulation12);//velocity being influenced by acceleration
+    this.position23.add(this.velocity54);//see? position being influenced by velocity
+    this.accelerationSimulation12.mult(0);//you must set acceleration to 0 because otherwise forces will keep on accumulating
+};
+
+//here, I create new instances of my dot type objects
+var DottyTheDot = new Dot();
+var foodDot = new smallDot();
+
+
+//Then over here i just update and display basically. I also throw in some forces.
+draw = function() { 
+    background(157, 232, 18); 
+    DottyTheDot.update();
+    var wind = new PVector(0.01, 0);
+    var gravity = new PVector(0, 0.1);
+    DottyTheDot.applyForce(wind);
+    DottyTheDot.applyForce(gravity);
+    DottyTheDot.display();
+    foodDot.display();
+};
+
+
+
