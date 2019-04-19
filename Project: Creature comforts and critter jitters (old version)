@@ -1,0 +1,80 @@
+//This is my older code
+
+//This code is not working right now and it is old, I currently have a working version based off of my computational creature
+
+
+//Predator object
+var predator = function(){
+    this.position = new PVector(0, height/2);
+    this.acceleration = new PVector(0,0);
+    this.velocity = new PVector (0, 0);
+    this.size = new PVector (10, 10);
+};
+//Food object for predator to pursue
+var food = function(){
+    this.position = new PVector(200,200);
+    this.acceleration = new PVector(0,0);
+    this.velocity = new PVector (0, 0);
+};
+
+//Update, position, velocity, and acceleration. There is a design here in order to calculate the direction the predator will take to get to the food
+predator.prototype.update = function(food){
+    var randomNumber = random(1, 5);
+    var g = new PVector(0, 0);
+    g.add(food);
+    var dir;
+    if (randomNumber === 5){ // there is a 1 in 5 chance that the predator will go after the food
+        dir = PVector.sub(g, this.position);
+        dir.normalize();
+        dir.magnitude(2);
+        this.acceleration = dir;
+        println(dir);
+    }
+    else{
+        this.acceleration = new PVector(random(-2, 2), (-2, 2));
+    }
+    //this is where the update basics happens
+    this.velocity.add(this.acceleration);
+    this.velocity.limit(2);
+    this.position.add(this.velocity);
+    println(this.acceleration); //for testing purposes
+};
+//this is where the edges get checked, this function causes the predator to wrap around if it goes off the screen
+predator.prototype.checkEdges = function(){
+    if(this.position.x > width){
+        this.position.x = 0;
+    } else if (this.position.x < 0){
+        this.position.y = width;
+    }
+    if(this.position.y > height){
+        this.position.y = 0;
+    }else if (this.position.y < 0){
+        this.position.y = height;
+    }
+};
+//this causes the predator to appear on the screen
+predator.prototype.display = function(){
+    fill(92, 80, 4);
+    noStroke();
+    ellipse(this.position.x, this.position.y, this.size.x, this.size.y);
+};
+
+this causes the food to appear on the screen
+food.prototype.display = function(){
+    fill(33, 22, 1);
+    ellipse(this.position.x, this.position.y, 50, 50);
+};
+
+//initialize a new food type object
+var tasty = new food();
+//initialize a new predator type object
+var eater = new predator();
+draw = function() {
+    background(75, 153, 96);
+    tasty.display(); //display food
+    
+    eater.update(tasty); //predator moves and might go after the food
+    eater.checkEdges(); //make predator wrap if it ever goes offscreen
+    eater.display(); //display the predator
+    
+};
