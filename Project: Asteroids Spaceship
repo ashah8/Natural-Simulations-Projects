@@ -1,82 +1,69 @@
-//It said to base this project off one of the mover examples. but I instead based it off of the car challenge because that was better for my purposes.
-
-angleMode = "radians";
-var Ship = function() {
-    this.position = new PVector(width/2, height/2);
-    this.velocity = new PVector(1, 0);
+rectMode(CENTER);
+var Spaceship = function(){
+    this.position = new PVector(200,200);
+    this.velocity = new PVector(0, 0);
     this.acceleration = new PVector(0, 0);
-    this.topspeed = 4;
-    this.xoff = 1000;
-    this.yoff = 0;
-    this.r = 16;
+    this.movingSpeed = 1;
+    this.rotateAngle = 0; 
 };
-Ship.prototype.update = function () {
-    this.velocity.add(this.acceleration);
-    this.velocity.limit(this.topspeed);
-    this.position.add(this.velocity);
-    this.acceleration.mult(0);
-};
-Ship.prototype.applyForce = function(force) {
+
+
+//In this case, a simplified version of the force = mass * acceleration is being used. The formula here is force = acceleration. 
+Spaceship.prototype.applyForce = function(force){
     this.acceleration.add(force);
 };
-Ship.prototype.turnLeft = function() {
-    var left = PVector.get(this.velocity);
-    left.rotate(-PI/2);
-    this.applyForce(left);
+
+Spaceship.prototype.update = function(){
+    this.velocity.add(this.acceleration);
+    this.position.add(this.velocity);
+    this.acceleration.set(0, 0);
 };
-Ship.prototype.turnRight = function() {
-    var right = PVector.get(this.velocity);
-    right.rotate(PI/2);
-    this.applyForce(right);
+
+Spaceship.prototype.calculateThrustForce = function(){
+    return (new PVector (cos(this.rotateAngle)*this.movingSpeed, sin(this.rotateAngle)*this.movingSpeed));
 };
-Ship.prototype.thrust = function(){
+Spaceship.prototype.turnLeft = function(){
+    this.rotateAngle-=4;
 };
-Ship.prototype.display = function () {
-    var angle = this.velocity.heading();
-    stroke(0, 0, 0);
-    strokeWeight(2);
-    fill(127, 127, 127);
+
+Spaceship.prototype.turnRight = function(){
+    this.rotateAngle+=4;
+};
+Spaceship.prototype.display = function(){
     pushMatrix();
-    rectMode(CENTER);
     translate(this.position.x, this.position.y);
-    rotate(angle);
-    fill(181, 174, 174);
-    ellipse(-40, 12, 20, 20);
-    ellipse(-40, -12, 20, 20);
-    triangle(-34, 40, -35, -40, 89, -2);
-    rect(0, 0, 29, 30);
-    fill(79, 79, 79);
-    rect(21, 0, 11, 26);
+    rotate(this.rotateAngle+90);
+    fill(0, 1, 1, 0);
+    stroke(0);
+    triangle(0, -10, 8, 5, -8, 5);
+    rect(-4, 5, 3, 2);
+    rect(3, 5, 3, 2);
     popMatrix();
 };
-Ship.prototype.checkEdges = function () {
-    if (this.position.x > width) {
-        this.position.x = 0;
-    } else if (this.position.x < 0) {
-        this.position.x = width;
+Spaceship.prototype.checkEdges = function(){
+    if(this.position.x!==constrain(this.position.x, 0, width)){
+        this.position.x = abs(this.position.x-width);
     }
-    if (this.position.y > height) {
-        this.position.y = 0;
-    } else if (this.position.y < 0) {
-        this.position.y = height;
+    if(this.position.y!==constrain(this.position.y, 0, height)){
+        this.position.y = abs(this.position.y-height);
     }
 };
-var car = new Ship();
-
-keyPressed = function(){
-    if (keyCode === LEFT){
-        car.turnLeft();
-    }
-    else if (keyCode === RIGHT){
-        car.turnRight();
-    }
-    else if (keyCode === 90){
-        
-    }
-};
+var ship = new Spaceship();
 draw = function() {
-    background(102, 209, 104);
-    car.update();
-    car.checkEdges();
-    car.display();
+    background(245, 228, 245);
+    var airDrag = ship.velocity.get(); //this is friction, if I do not apply a simple friction than the spaceship will keep on moving when thrust force is applied which is extremely unrealistic because in the real world forces slow things down
+    airDrag.mult(-0.01); 
+    ship.applyForce(airDrag);
+    ship.update();
+    ship.checkEdges();
+    ship.display();
+};
+keyPressed = function(){
+    if (keyCode === RIGHT){
+        ship.turnRight();
+    }else if (keyCode === LEFT){
+        ship.turnLeft();
+    }else if (keyCode === 90/*z*/){
+        ship.applyForce(ship.calculateThrustForce());
+    }
 };
