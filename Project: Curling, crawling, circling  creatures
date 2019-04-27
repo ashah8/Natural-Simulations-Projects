@@ -1,0 +1,88 @@
+//Abdurrahman Shah
+//April 27, 2019
+
+/*I realized how badly I've been commenting code so this time I will try to make simple remarks that accurately describe what is going on in this code*/
+
+//Butterfly object constructor (In order to initalize a butterfly)
+var Butterfly = function(){
+    this.position = new PVector(width/2,height/2);
+    this.velocity = new PVector(0, 0);
+    
+    this.angle = 0; //In order to incorporate oscillation
+    this.amplitude = 50; //To multiply what comes out of the sine function
+    this.angularVelocity = 2; //This will be added to the angle value, making this value bigger will lower the period, thus making the butterfly move more rapidly
+};
+
+//Draw the butterfly function
+Butterfly.prototype.display = function(){
+    rectMode(CENTER); //Set the rectangle mode to center meaning that instead of a rectangle's location being based on its corner, the rectangle location will now be based off its center
+    pushMatrix();//push and pop matrix used in order to not affect the rest of the world
+    
+    //add random values to the x location and y location of this butterfly in order to create a move point where the butterfly will be drawn. The idea is oscillation around a moving point
+    this.position.x = this.position.x + random(2,-2);
+    this.position.y = this.position.y + random(2,-2);
+    translate(this.position.x, this.position.y); //translating the x and y axis to the position of the butterfly so that the location. The code that follows will just draw a butterfly at the current position of the butterfly.
+    fill(0, 77, 36);
+    ellipse(27, 9, 59, 56);
+    ellipse(-27, 9, 59, 56);
+    fill(255, 0, 0);
+    ellipse(-27, 9, 24, 56);
+    ellipse(27, 9, 24, 56);
+    fill(186, 81, 11);
+    rect(0, 0, 10, 60);
+    fill(0, 0, 0);
+    ellipse(0, -30, 20, 20);
+    fill(255, 0, 0);
+    ellipse(35, -17, 60, 31);
+    ellipse(-35, -17, 60, 31);
+    fill(242, 77, 0);
+    ellipse(36, -16, 36, 20);
+    ellipse(-36, -16, 36, 20);
+    fill(99, 217, 70);
+    ellipse(36, -16, 20, 20);
+    ellipse(-36, -16, 20, 20);
+    
+    popMatrix();
+};
+//This will check the edges seeing if the butterfly is overlapping them, if it is, then the butterfly will be drawn back at the opposite location, basically wrapping around the canvas
+Butterfly.prototype.checkEdges = function(){
+    if (this.position.x > width)
+    {
+        this.position.x = 0;
+    }
+    else if (this.position.x < 0){
+        this.position.x = width;
+    }
+    if (this.position.y > height){
+        this.position.y = 0;
+    }
+    else if (this.position.y < 0){
+        this.position.y = height;
+    }
+};
+var butterfly = new Butterfly();
+butterfly.display();
+Butterfly.prototype.update = function()
+{
+    this.acceleration = new PVector(random(2), random(2));
+    this.velocity = this.velocity + this.acceleration;
+    this.position.x = this.amplitude*sin(this.angle)+200;
+    this.angle = this.angle + this.angularVelocity;
+};
+//This is where the animation happens as frames are repeated being shown to the user
+draw = function() {
+    //The drawing commands here just draw the background making the world more interesting
+    fill(5, 71, 13);
+    background(227, 227, 227);
+    fill(43, 162, 171);
+    rect(197, 240, 407, 488);
+    fill(0, 255, 68);
+    rect(197, 414, 407, 210);
+    fill(217, 199, 0);
+    ellipse(400, 0, 180,180);
+    //these commands call the functionality of the butterfly, thus the butterfly "functions" by moving around/oscillating around the screen
+    butterfly.update();
+    butterfly.checkEdges();
+    butterfly.display();
+};
+//Thanks for taking the time to go through this code. 
